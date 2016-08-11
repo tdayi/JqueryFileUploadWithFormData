@@ -1,0 +1,86 @@
+﻿@*
+    Tufan DAYI
+    tdayi@hotmail.com
+*@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Jquery File Upload With Form Data</title>
+    <link rel="stylesheet" type="text/css" href="/Assets/bootstrap-3.3.7-dist/css/bootstrap.min.css" />
+    <script type="text/javascript" src="/Assets/jquery.js"></script>
+    <script type="text/javascript" src="/Assets/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+
+    <!--MalsupJqueryForm-->
+    <script type="text/javascript" src="/Assets/jquery.form.js"></script>
+    <!--/MalsupJqueryForm-->
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            FilePost();
+        });
+
+        function FilePost() {
+            $('#frmSample').ajaxForm({
+                beforeSend: function () {
+                    SetProgressStatus(0);
+                },
+                uploadProgress: function (event, position, total, percentComplete) {
+                    SetProgressStatus(percentComplete);
+                },
+                beforeSubmit: function (formData, jqForm, options) {
+                    SetProgressStatus(0);
+                },
+                success: function (result, statusText) {
+                    SetProgressStatus(100);
+                },
+                error: function (xhr) {
+                    SetProgressStatus(0);
+                },
+                complete: function () {
+                    SetProgressStatus(0);
+                }
+            });
+        };
+
+        function SetProgressStatus(percentComplete) {
+            if (percentComplete > 0) {
+                $('.progress').show();
+            } else {
+                $('.progress').hide();
+            };
+            $('.progress-bar').css('width', percentComplete + '%').attr('aria-valuenow', percentComplete);
+            $('.progress-bar').empty().append('%' + percentComplete);
+        };
+    </script>
+</head>
+<body>
+    <div style="width:500px; margin:0 auto; margin-top:10%">
+        <form id="frmSample" action="/Home/SaveUser" method="post" enctype="multipart/form-data">
+            <div class="progress" style="display:none;">
+                <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3">File</label>
+                <input type="file" name="File" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3">Name</label>
+                <input type="text" name="Name" placeholder="Name" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3">Surname</label>
+                <input type="text" name="Surname" placeholder="Surname" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-3">BirthPlace</label>
+                <input type="text" name="BirthPlace" placeholder="BirthPlace" class="form-control" />
+            </div>
+            <button class="btn" type="submit">Save</button>
+        </form>
+    </div>
+</body>
+</html>
